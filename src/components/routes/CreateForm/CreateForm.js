@@ -8,7 +8,7 @@ const CreateForm = () => {
   const [formTitle, setFormTitle] = useState("");
   const [savedFormTitle, setSavedFormTitle] = useState("");
   const [isEditingTitle, setIsEditingTitle] = useState(true);
-  const [groups, setGroups] = useState([]);
+  const [grps, setGrps] = useState([]);
   const [totalMarks, setTotalMarks] = useState(0);
   const [isTotalMarksValid, setIsTotalMarksValid] = useState(true);
 
@@ -32,10 +32,9 @@ const CreateForm = () => {
   // Function to handle adding a new section
   const addGroup = () => {
     if (newSectionTitle.trim() === "") {
-      // Optionally, handle empty title case here
       return;
     }
-    setGroups([...groups, { title: newSectionTitle, questions: [] }]);
+    setGrps([...grps, { title: newSectionTitle, questions: [] }]);
     setNewSectionTitle(""); // Clear input after adding
     closeSectionModal(); // Close modal
   };
@@ -48,23 +47,23 @@ const CreateForm = () => {
 
   // Handle section title change
   const handleSectionTitleChange = (e, groupIndex) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].title = e.target.value;
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps[groupIndex].title = e.target.value;
+    setGrps(newGrps);
   };
 
   // Delete a section (group) from the form
   const deleteSection = (groupIndex) => {
-    const newGroups = [...groups];
-    newGroups.splice(groupIndex, 1);
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps.splice(groupIndex, 1);
+    setGrps(newGrps);
   };
 
   // Edit a section (group) title
   const editSection = (groupIndex) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].isEditing = true;
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps[groupIndex].isEditing = true;
+    setGrps(newGrps);
   };
 
   // Open and close modals
@@ -79,10 +78,10 @@ const CreateForm = () => {
   const openQuestionModal = (groupIndex) => {
     setCurrentGroupIndex(groupIndex);
     // Set the current question index to the latest question in the group
-    if (groups[groupIndex] && groups[groupIndex].questions.length > 0) {
-      setCurrentQuestionIndex(groups[groupIndex].questions.length - 1);
+    if (grps[groupIndex] && grps[groupIndex].questions.length > 0) {
+      setCurrentQuestionIndex(grps[groupIndex].questions.length - 1);
     } else {
-      setCurrentQuestionIndex(null); // or handle the case when there are no questions
+      setCurrentQuestionIndex(null);
     }
     setIsQuestionModalOpen(true);
   };
@@ -93,8 +92,8 @@ const CreateForm = () => {
 
   // Add a new question to a section (group)
   const addQuestion = (groupIndex) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions.push({
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions.push({
       type: "multiple",
       questionText: "",
       savedQuestionText: "",
@@ -102,43 +101,43 @@ const CreateForm = () => {
       marks: 0,
       isEditing: true,
     });
-    setGroups(newGroups);
-    setCurrentQuestionIndex(newGroups[groupIndex].questions.length - 1); 
+    setGrps(newGrps);
+    setCurrentQuestionIndex(newGrps[groupIndex].questions.length - 1);
   };
 
   // Edit a question in a section (group)
   const editQuestion = (groupIndex, questionIndex) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions[questionIndex].isEditing = true;
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions[questionIndex].isEditing = true;
+    setGrps(newGrps);
   };
 
   // Save a question in a section (group)
   const saveQuestion = (groupIndex, questionIndex) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions[questionIndex].savedQuestionText =
-      newGroups[groupIndex].questions[questionIndex].questionText;
-    newGroups[groupIndex].questions[questionIndex].isEditing = false;
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions[questionIndex].savedQuestionText =
+      newGrps[groupIndex].questions[questionIndex].questionText;
+    newGrps[groupIndex].questions[questionIndex].isEditing = false;
+    setGrps(newGrps);
     closeQuestionModal();
   };
 
   // Delete a question from a section (group)
   const deleteQuestion = (groupIndex, questionIndex) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions.splice(questionIndex, 1);
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions.splice(questionIndex, 1);
+    setGrps(newGrps);
   };
 
   // Handle marks change for a question
   const handleMarksChange = (groupIndex, questionIndex, marks) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions[questionIndex].marks = parseInt(marks) || 0;
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions[questionIndex].marks = parseInt(marks) || 0;
+    setGrps(newGrps);
 
     // Calculate the total marks
-    const total = newGroups.reduce((acc, group) => {
-      return acc + group.questions.reduce((qAcc, question) => qAcc + question.marks, 0);
+    const total = newGrps.reduce((acc, grp) => {
+      return acc + grp.questions.reduce((qAcc, question) => qAcc + question.marks, 0);
     }, 0);
 
     setTotalMarks(total);
@@ -154,50 +153,48 @@ const CreateForm = () => {
   }, [totalMarks]);
 
   const handleQuestionTypeChange = (groupIndex, questionIndex, type) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions[questionIndex].type = type;
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions[questionIndex].type = type;
+    setGrps(newGrps);
   };
 
   const handleQuestionTextChange = (groupIndex, questionIndex, text) => {
-    const newGroups = [...groups];
-    
-    // Check if the group and question exist
-    if (newGroups[groupIndex] && newGroups[groupIndex].questions[questionIndex]) {
-      newGroups[groupIndex].questions[questionIndex].questionText = text;
-      setGroups(newGroups);
+    const newGrps = [...grps];
+    if (newGrps[groupIndex] && newGrps[groupIndex].questions[questionIndex]) {
+      newGrps[groupIndex].questions[questionIndex].questionText = text;
+      setGrps(newGrps);
     } else {
       console.error("Group or question not found");
     }
   };
 
   const addOption = (groupIndex, questionIndex) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions[questionIndex].options.push({
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions[questionIndex].options.push({
       text: "",
       isFatal: false,
       reasons: [""],
     });
-    setGroups(newGroups);
+    setGrps(newGrps);
   };
 
   const handleOptionTextChange = (groupIndex, questionIndex, optionIndex, text) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions[questionIndex].options[optionIndex].text = text;
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions[questionIndex].options[optionIndex].text = text;
+    setGrps(newGrps);
   };
 
   const toggleIsFatal = (groupIndex, questionIndex, optionIndex) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions[questionIndex].options[optionIndex].isFatal =
-      !newGroups[groupIndex].questions[questionIndex].options[optionIndex].isFatal;
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions[questionIndex].options[optionIndex].isFatal =
+      !newGrps[groupIndex].questions[questionIndex].options[optionIndex].isFatal;
+    setGrps(newGrps);
   };
 
   const addReason = (groupIndex, questionIndex, optionIndex) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions[questionIndex].options[optionIndex].reasons.push("");
-    setGroups(newGroups);
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions[questionIndex].options[optionIndex].reasons.push("");
+    setGrps(newGrps);
   };
 
   const handleReasonChange = (
@@ -207,11 +204,11 @@ const CreateForm = () => {
     reasonIndex,
     text
   ) => {
-    const newGroups = [...groups];
-    newGroups[groupIndex].questions[questionIndex].options[optionIndex].reasons[
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions[questionIndex].options[optionIndex].reasons[
       reasonIndex
     ] = text;
-    setGroups(newGroups);
+    setGrps(newGrps);
   };
 
   // Handle form submission
@@ -220,12 +217,12 @@ const CreateForm = () => {
       alert("Inappropriate marks distribution!! Please Try Again");
       return;
     }
-  
+
     const formData = {
       formTitle: savedFormTitle,
-      groups,
+      grps,
     };
-  
+
     try {
       await axios.post("http://localhost:3007/submit-form", formData);
       alert("Form submitted successfully!");
@@ -233,7 +230,7 @@ const CreateForm = () => {
       console.error("Error submitting form", error);
     }
   };
-  
+
   return (
     <div>
       <div className="formpage-heading">Create Form</div>
@@ -260,110 +257,78 @@ const CreateForm = () => {
           </div>
         )}
       </div>
+
+      {/* *********** */}
+
       <div>
-        {groups.map((group, groupIndex) => (
+        {grps.map((grp, groupIndex) => (
           <div className="section-container" key={groupIndex}>
-            <div className="section-contents">
-              {group.isEditing ? (
-                <input
-                  type="text"
-                  value={group.title}
-                  onChange={(e) => handleSectionTitleChange(e, groupIndex)}
-                />
-              ) : (
-                <h3>{group.title}</h3>
-              )}
-              <button
-                onClick={() => editSection(groupIndex)}
-                className="edit-save headi-btns"
-              >
-                Edit Section
-              </button>
-              <button
-                onClick={() => deleteSection(groupIndex)}
-                className="edit-save headi-btns"
-              >
-                Delete Section
-              </button>
+            <input
+              type="text"
+              placeholder="Enter Section Title"
+              value={grp.title}
+              className="inpt-boxes sect-inpt"
+              onChange={(e) => handleSectionTitleChange(e, groupIndex)}
+            />
+            <button
+              onClick={() => deleteSection(groupIndex)}
+              className="edit-save add-qns"
+            >
+              Delete Section
+            </button>
+            <div>
+            <button
+              onClick={() => handleAddQuestion(groupIndex)}
+              className="edit-save add-qns"
+            >
+              Add Question
+            </button>
+
             </div>
-            <div className="questions-container">
-              {group.questions.map((question, questionIndex) => (
-                <div key={questionIndex} className="section-questions">
-                  {question.isEditing ? (
-                    <div className="input-question">
-                      <input
-                        type="text"
-                        value={question.questionText}
-                        onChange={(e) =>
-                          handleQuestionTextChange(
-                            groupIndex,
-                            questionIndex,
-                            e.target.value
-                          )
-                        }
-                      />
+            {grp.questions.map((question, questionIndex) => (
+              <div className="questions-container" key={questionIndex}>
+                {question.isEditing ? (
+                  <div className="question-section">
+                    <input
+                      type="text"
+                      placeholder="Enter Question Text"
+                      value={question.questionText}
+                      className="input-question"
+                      onChange={(e) =>
+                        handleQuestionTextChange(groupIndex, questionIndex, e.target.value)
+                      }
+                    />
+                    <div className="choice-marks">
                       <select
                         value={question.type}
-                        onChange={(e) =>
-                          handleQuestionTypeChange(
-                            groupIndex,
-                            questionIndex,
-                            e.target.value
-                          )
-                        }
                         className="select-type"
+                        onChange={(e) =>
+                          handleQuestionTypeChange(groupIndex, questionIndex, e.target.value)
+                        }
                       >
-                        <option value="multiple">Multiple Choice(Checkboxes)</option>
-                        <option value="single">Single Choice(Radio Buttons)</option>
+                        <option value="multiple">Multiple Choice</option>
+                        <option value="single">Single Choice</option>
                         <option value="freeform">Free Form</option>
                       </select>
                       <input
                         type="number"
+                        placeholder="Marks"
                         value={question.marks}
+                        className="marks-input"
                         onChange={(e) =>
                           handleMarksChange(groupIndex, questionIndex, e.target.value)
                         }
-                        placeholder="Marks"
-                        className="marks-input"
                       />
-                      <button
-                        onClick={() => saveQuestion(groupIndex, questionIndex)}
-                        className="edit-save save-btn"
-                      >
-                        Save Question
-                      </button>
                     </div>
-                  ) : (
-                    <div>
-                      <h4>{question.savedQuestionText}</h4>
-                      <button
-                        onClick={() => editQuestion(groupIndex, questionIndex)}
-                        className="edit-save"
-                      >
-                        Edit Question
-                      </button>
-                      <button
-                        onClick={() => deleteQuestion(groupIndex, questionIndex)}
-                        className="edit-save"
-                      >
-                        Delete Question
-                      </button>
-                    </div>
-                  )}
-                  <div>
-                    {question.type !== "freeform" && (
-                      <div>
-                        <button
-                          onClick={() => addOption(groupIndex, questionIndex)}
-                          className="edit-save add-qns"
-                        >
-                          Add Option
-                        </button>
+                    {question.type === "multiple" || question.type === "single" ? (
+                      <div >
                         {question.options.map((option, optionIndex) => (
                           <div key={optionIndex}>
                             <input
                               type="text"
+                              placeholder="Enter Option Text"
                               value={option.text}
+                              className="input-question opt-txt"
                               onChange={(e) =>
                                 handleOptionTextChange(
                                   groupIndex,
@@ -385,11 +350,14 @@ const CreateForm = () => {
                             </label>
                             {option.isFatal && (
                               <div>
+                                <label>Reasons:</label>
                                 {option.reasons.map((reason, reasonIndex) => (
                                   <input
                                     key={reasonIndex}
                                     type="text"
+                                    placeholder="Enter Reason"
                                     value={reason}
+                                    className="input-question"
                                     onChange={(e) =>
                                       handleReasonChange(
                                         groupIndex,
@@ -399,14 +367,13 @@ const CreateForm = () => {
                                         e.target.value
                                       )
                                     }
-                                    placeholder="Enter Reason"
                                   />
                                 ))}
                                 <button
                                   onClick={() =>
                                     addReason(groupIndex, questionIndex, optionIndex)
                                   }
-                                  className="edit-save"
+                                  className="edit-save add-qns"
                                 >
                                   Add Reason
                                 </button>
@@ -414,61 +381,224 @@ const CreateForm = () => {
                             )}
                           </div>
                         ))}
+                        <button
+                          onClick={() => addOption(groupIndex, questionIndex)}
+                          className="edit-save add-qns"
+                        >
+                          Add Option
+                        </button>
                       </div>
-                    )}
+                    ) : null}
+                    <button
+                      onClick={() => saveQuestion(groupIndex, questionIndex)}
+                      className="edit-save save-btn normal-save-ques"
+                    >
+                      Save Question
+                    </button>
                   </div>
-                </div>
-              ))}
-              <button
-                onClick={() => handleAddQuestion(groupIndex)}
-                className="edit-save add-qns"
-              >
-                + ADD QUESTION
-              </button>
-            </div>
+                ) : (
+                  <div>
+                    <h4>{question.savedQuestionText}</h4>
+                    <button
+                      onClick={() => editQuestion(groupIndex, questionIndex)}
+                      className="edit-save add-qns"
+                    >
+                      Edit Question
+                    </button>
+                    <button
+                      onClick={() => deleteQuestion(groupIndex, questionIndex)}
+                      className="edit-save add-qns"
+                    >
+                      Delete Question
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         ))}
       </div>
+      <button onClick={openSectionModal} className="edit-save submit-section">
+        Add Section
+      </button>
       <div className="submit-section">
-        <button onClick={openSectionModal} className="edit-save">
-          + ADD SECTION
-        </button>
-        <p>Total Marks: {totalMarks}</p>
-
-        {/* {!isTotalMarksValid && (
-          <div className="error-message">Inappropriate marks distribution, Please Try Again</div>
-        )} */}
-
-        <button onClick={handleSubmit} className="edit-save">
+        <button onClick={handleSubmit} className="edit-save submit-btn">
           Submit Form
         </button>
       </div>
+
+      {/* Modal for adding a new section */}
       {isSectionModalOpen && (
         <div className="modal">
           <div className="modal-content">
-            <h3>Add Section</h3>
+            <h3 className="pop-up-headi">Add New Section</h3>
             <input
               type="text"
+              placeholder="Enter Section Title"
               value={newSectionTitle}
+              className="inpt-boxes sect-inpt"
               onChange={(e) => setNewSectionTitle(e.target.value)}
-              placeholder="Section Title"
             />
-            <button onClick={addGroup} className="edit-save">
+            <button onClick={addGroup} className="edit-save save-btn">
               Save Section
             </button>
-            <button onClick={closeSectionModal} className="edit-save">
+            <button onClick={closeSectionModal} className="edit-save save-btn">
               Close
             </button>
           </div>
         </div>
       )}
+
+      {/* Modal for adding a new question */}
       {isQuestionModalOpen && (
         <div className="modal">
           <div className="modal-content">
-            <h3>Add Question</h3>
-            <button onClick={closeQuestionModal} className="edit-save">
-              Close
-            </button>
+            <h3 className="pop-up-headi">Add New Question</h3>
+            {currentGroupIndex !== null &&
+              currentQuestionIndex !== null &&
+              grps[currentGroupIndex] &&
+              grps[currentGroupIndex].questions[currentQuestionIndex] && (
+                <div className="question-section">
+                  <input
+                    type="text"
+                    placeholder="Enter Question Text"
+                    value={
+                      grps[currentGroupIndex].questions[currentQuestionIndex].questionText
+                    }
+                    className="input-question "
+                    onChange={(e) =>
+                      handleQuestionTextChange(
+                        currentGroupIndex,
+                        currentQuestionIndex,
+                        e.target.value
+                      )
+                    }
+                  />
+                  <div className="choice-marks">
+                    <select
+                      value={grps[currentGroupIndex].questions[currentQuestionIndex].type}
+                      className="select-type"
+                      onChange={(e) =>
+                        handleQuestionTypeChange(
+                          currentGroupIndex,
+                          currentQuestionIndex,
+                          e.target.value
+                        )
+                      }
+                    >
+                      <option value="multiple">Multiple Choice</option>
+                      <option value="single">Single Choice</option>
+                      <option value="freeform">Free Form</option>
+                    </select>
+                    <input
+                      type="number"
+                      placeholder="Marks"
+                      value={grps[currentGroupIndex].questions[currentQuestionIndex].marks}
+                      className="marks-input"
+                      onChange={(e) =>
+                        handleMarksChange(
+                          currentGroupIndex,
+                          currentQuestionIndex,
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                  {grps[currentGroupIndex].questions[currentQuestionIndex].type ===
+                    "multiple" ||
+                  grps[currentGroupIndex].questions[currentQuestionIndex].type ===
+                    "single" ? (
+                    <div>
+                      {grps[currentGroupIndex].questions[
+                        currentQuestionIndex
+                      ].options.map((option, optionIndex) => (
+                        <div key={optionIndex}>
+                          <input
+                            type="text"
+                            placeholder="Enter Option Text"
+                            value={option.text}
+                            className="input-question"
+                            onChange={(e) =>
+                              handleOptionTextChange(
+                                currentGroupIndex,
+                                currentQuestionIndex,
+                                optionIndex,
+                                e.target.value
+                              )
+                            }
+                          />
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={option.isFatal}
+                              onChange={() =>
+                                toggleIsFatal(
+                                  currentGroupIndex,
+                                  currentQuestionIndex,
+                                  optionIndex
+                                )
+                              }
+                            />
+                            Is Fatal
+                          </label>
+                          {option.isFatal && (
+                            <div>
+                              <label>Reasons:</label>
+                              {option.reasons.map((reason, reasonIndex) => (
+                                <input
+                                  key={reasonIndex}
+                                  type="text"
+                                  placeholder="Enter Reason"
+                                  value={reason}
+                                  className="input-question"
+                                  onChange={(e) =>
+                                    handleReasonChange(
+                                      currentGroupIndex,
+                                      currentQuestionIndex,
+                                      optionIndex,
+                                      reasonIndex,
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              ))}
+                              <button
+                                onClick={() =>
+                                  addReason(
+                                    currentGroupIndex,
+                                    currentQuestionIndex,
+                                    optionIndex
+                                  )
+                                }
+                                className="edit-save add-qns"
+                              >
+                                Add Reason
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                      <button
+                        onClick={() => addOption(currentGroupIndex, currentQuestionIndex)}
+                        className="edit-save add-qns"
+                      >
+                        Add Option
+                      </button>
+                    </div>
+                  ) : null}
+                  <button
+                    onClick={() =>
+                      saveQuestion(currentGroupIndex, currentQuestionIndex)
+                    }
+                    className="edit-save save-btn save-ques"
+                  >
+                    Save Question
+                  </button>
+                  <button onClick={closeQuestionModal} className="edit-save save-btn">
+                    Close
+                  </button>
+                </div>
+              )}
           </div>
         </div>
       )}
