@@ -1,0 +1,193 @@
+/* src/components/routes/CreateForm/CreateForm/CreateForm.css */
+
+/* Page Heading */
+.formpage-heading {
+    background-color: #364C63;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Title Container */
+.title-container {
+    border: 1px solid #ddd;
+    width: 90%;
+    margin: auto;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+/* Form Heading */
+.form-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Input Boxes */
+.inpt-boxes {
+    width: 20vw; /* Increased width for better usability */
+    margin: auto;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Section Container */
+.section-container {
+    border: 1px solid #ddd;
+    margin: 1rem auto;
+    border-radius: 5px;
+    padding: 1rem;
+    width: 80%;
+
+}
+
+.section-contents{
+    display: flex;
+}
+
+/* Buttons */
+.edit-save {
+    background-color: #EF6F53;
+    color: white;
+    font-size: 0.9em;
+    border: none;
+    padding: 0.5rem 1rem; /* Added padding for better button size */
+    border-radius: 5px; /* Reduced border-radius for a softer look */
+    width: auto; /* Adjusted width to fit button content */
+    margin: 0.5rem auto;
+    cursor: pointer; /* Added cursor style for better UX */
+    transition: background-color 0.3s ease; /* Added transition for hover effect */
+}
+
+.edit-save:hover {
+    background-color: #e55347; /* Darker shade on hover */
+}
+
+/* Add Questions Button */
+.add-qns {
+    margin-bottom: 1rem;
+}
+
+/* Heading Buttons */
+.headi-btns {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+/* Question Section */
+.question-section {
+    width: 20vw; /* Increased width for better usability */
+}
+
+/* Section Questions */
+.section-questions {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    width: 80%;
+    margin: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+/* Questions Container */
+.questions-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    margin: 1rem auto;
+    width: 70%;
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+/* Choice Marks */
+.choice-marks {
+    margin-top: 1rem;
+}
+
+/* Select Type */
+.select-type {
+    width: 50%;
+    margin: auto;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Marks Input */
+.marks-input {
+    width: 25%;
+    margin: auto;
+    margin-left: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Input Question */
+.input-question {
+    width: 90%;
+    margin: auto;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Save Button */
+.save-btn {
+    margin-bottom: 1rem;
+}
+
+/* Section Input */
+.sect-inpt {
+    margin-top: 1rem;
+}
+
+/* Submit Section */
+.submit-section {
+    margin: auto;
+    text-align: center;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 5px;
+    margin: auto;
+    width: 80%;
+    max-width: 600px; 
+}
+
+.pop-up-headi{
+    background-color: #364C63;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 800;
+    padding: 0.25rem;
+}

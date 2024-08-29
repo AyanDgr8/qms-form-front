@@ -1,0 +1,35 @@
+/* src/components/routes/ViewForm/ViewForm/ViewForm.css */
+
+
+.form-view {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.group {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.question {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+.option {
+    border: 1px solid #eee;
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+.reasons {
+    border: 1px solid #eee;
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 5px;
+}
