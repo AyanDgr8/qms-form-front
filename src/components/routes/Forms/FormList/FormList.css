@@ -1,0 +1,52 @@
+/* src/components/routes/FormList/FormList.css */
+
+.form-tiel {
+    background-color: #EF6F53;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 800;
+    padding: 0.5rem;
+    /* text-align: left; */
+}
+
+.form-list {
+    overflow-y: auto;
+    height: 75vh;
+    padding: 0.15rem;
+}
+
+.form-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.form-table th,
+.form-table td {
+    padding: 0.25rem;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.form-table th {
+    background-color: #f2f2f2;
+    font-weight: 700;
+    color: #364c63;
+}
+
+.form-table td {
+    background-color: #fff;
+}
+
+.form-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.form-table a {
+    text-decoration: none;
+    color: #EF6F53;
+}
+
+.form-table a:hover {
+    text-decoration: underline;
+    color: #364c63;
+}

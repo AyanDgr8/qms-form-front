@@ -1,0 +1,83 @@
+/* src/components/routes/Header/Header/Header.css */
+
+.header-container{
+    position: relative;
+    display: flex;
+    margin-bottom: 0;
+}
+
+.logo{
+    position: relative;
+    left: 1rem;
+    top: 1rem;
+    width: 20vw;
+    margin-bottom: 0;
+}
+
+.header-right{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right:0;
+    top:1vh;
+}
+
+.three-names, .three-buttons{
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    right:0;
+
+}
+
+.three-names{
+    justify-content: end;
+    margin-right: 1rem;
+}
+
+.three-things{
+    padding: 0.5rem;
+    font-size: 0.75em;
+    color: #A0A3A7;
+    font-weight: 500;
+}
+
+.name-user{
+    font-weight: 900;
+    color: #364c63;
+}
+
+.special-thing{
+    border: 1px solid;
+    border-color:  #A0A3A7;
+    border-width:0.1rem ;
+    border-top: none;
+    border-bottom:none ;
+    margin-right:0 ;
+}
+
+.btnss{
+    background-color: #EF6F53;
+    color: white;
+    font-size: 0.9em;
+    border:none;
+    padding: 0.1rem;
+    margin: 1rem;
+    margin-top: 0;
+    border-radius: 10px;
+    width: 8vw;
+}
+
+.btnss:hover{
+    background-color: rgba(188, 188, 188, 0.857);
+    color:black;
+}
+
+.home-btn{
+    color: white;
+    text-decoration: none;
+}
+.home-btn:hover{
+    background-color: rgba(188, 188, 188, 0.857);
+    color:black;
+}

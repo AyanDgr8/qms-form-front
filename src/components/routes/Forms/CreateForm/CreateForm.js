@@ -1,6 +1,7 @@
 // src/components/routes/CreateForm/CreateForm.js
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import "./CreateForm.css";
 
@@ -10,13 +11,15 @@ const CreateForm = () => {
   const [isEditingTitle, setIsEditingTitle] = useState(true);
   const [grps, setGrps] = useState([]);
   const [totalMarks, setTotalMarks] = useState(0);
-  const [isTotalMarksValid, setIsTotalMarksValid] = useState(true);
 
+  const [isTotalMarksValid, setIsTotalMarksValid] = useState(true);
+  
   const [newSectionTitle, setNewSectionTitle] = useState("");
   const [isSectionModalOpen, setIsSectionModalOpen] = useState(false);
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
   const [currentGroupIndex, setCurrentGroupIndex] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(null);
+  const navigate = useNavigate();
 
   // Save the form title
   const saveFormTitle = () => {
@@ -32,11 +35,12 @@ const CreateForm = () => {
   // Function to handle adding a new section
   const addGroup = () => {
     if (newSectionTitle.trim() === "") {
+      alert("Section title cannot be empty.");
       return;
     }
     setGrps([...grps, { title: newSectionTitle, questions: [] }]);
-    setNewSectionTitle(""); // Clear input after adding
-    closeSectionModal(); // Close modal
+    setNewSectionTitle(""); 
+    closeSectionModal(); 
   };
 
   // Function to handle adding a new question
@@ -56,13 +60,6 @@ const CreateForm = () => {
   const deleteSection = (groupIndex) => {
     const newGrps = [...grps];
     newGrps.splice(groupIndex, 1);
-    setGrps(newGrps);
-  };
-
-  // Edit a section (group) title
-  const editSection = (groupIndex) => {
-    const newGrps = [...grps];
-    newGrps[groupIndex].isEditing = true;
     setGrps(newGrps);
   };
 
@@ -143,6 +140,9 @@ const CreateForm = () => {
     setTotalMarks(total);
   };
 
+  // Handle marks change for a section
+
+
   useEffect(() => {
     // Check if total marks are exactly 100
     if (totalMarks !== 100) {
@@ -197,6 +197,12 @@ const CreateForm = () => {
     setGrps(newGrps);
   };
 
+
+  const handleFreeformChange = (groupIndex, questionIndex, text) => {
+    const newGrps = [...grps];
+    newGrps[groupIndex].questions[questionIndex].freeformText = text;
+    setGrps(newGrps);
+  };
   const handleReasonChange = (
     groupIndex,
     questionIndex,
@@ -224,16 +230,18 @@ const CreateForm = () => {
     };
 
     try {
-      await axios.post("http://localhost:3007/submit-form", formData);
+      await axios.post("http://localhost:3005/submit-form", formData);
       alert("Form submitted successfully!");
+      navigate('/forms'); // Navigate to FormList.js
     } catch (error) {
       console.error("Error submitting form", error);
     }
   };
 
   return (
-    <div>
+    <div className="whole-form">
       <div className="formpage-heading">Create Form</div>
+      <p className="mark-scores">Total Score: {totalMarks}</p>
       <div className="title-container">
         {isEditingTitle ? (
           <div className="form-heading">
@@ -241,7 +249,7 @@ const CreateForm = () => {
               type="text"
               placeholder="Enter Form Title"
               value={formTitle}
-              className="inpt-boxes"
+              className="inpt-boxes tt-ip"
               onChange={(e) => setFormTitle(e.target.value)}
             />
             <button onClick={saveFormTitle} className="edit-save headi-btns">
@@ -272,10 +280,15 @@ const CreateForm = () => {
             />
             <button
               onClick={() => deleteSection(groupIndex)}
-              className="edit-save add-qns"
+              className="edit-save trash"
             >
-              Delete Section
+              <img 
+                src="./uploads/trash.svg"
+                className="trash"
+                alt="trash"
+              />
             </button>
+
             <div>
             <button
               onClick={() => handleAddQuestion(groupIndex)}
@@ -300,20 +313,21 @@ const CreateForm = () => {
                     />
                     <div className="choice-marks">
                       <select
-                        value={question.type}
+                        value={question.marks || ''}
                         className="select-type"
+                        placeholder="Score"
                         onChange={(e) =>
                           handleQuestionTypeChange(groupIndex, questionIndex, e.target.value)
                         }
                       >
                         <option value="multiple">Multiple Choice</option>
                         <option value="single">Single Choice</option>
-                        <option value="freeform">Free Form</option>
+                        <option value="freeform">Descriptive Remarks</option>
                       </select>
                       <input
                         type="number"
-                        placeholder="Marks"
-                        value={question.marks}
+                        placeholder="Score"
+                        value={question.marks || ''}
                         className="marks-input"
                         onChange={(e) =>
                           handleMarksChange(groupIndex, questionIndex, e.target.value)
@@ -349,15 +363,15 @@ const CreateForm = () => {
                               Is Fatal
                             </label>
                             {option.isFatal && (
-                              <div>
-                                <label>Reasons:</label>
+                              <div className="reason-container">
+                                <label className="reason">Reasons:</label>
                                 {option.reasons.map((reason, reasonIndex) => (
                                   <input
                                     key={reasonIndex}
                                     type="text"
                                     placeholder="Enter Reason"
                                     value={reason}
-                                    className="input-question"
+                                    className="input-question inp-reasons"
                                     onChange={(e) =>
                                       handleReasonChange(
                                         groupIndex,
@@ -373,7 +387,7 @@ const CreateForm = () => {
                                   onClick={() =>
                                     addReason(groupIndex, questionIndex, optionIndex)
                                   }
-                                  className="edit-save add-qns"
+                                  className="edit-save add-reasons"
                                 >
                                   Add Reason
                                 </button>
@@ -383,15 +397,31 @@ const CreateForm = () => {
                         ))}
                         <button
                           onClick={() => addOption(groupIndex, questionIndex)}
-                          className="edit-save add-qns"
+                          className="edit-save"
                         >
                           Add Option
                         </button>
                       </div>
+                    ) : question.type === "freeform" ? (
+                      <div>
+                        <label>
+                          Enter Remarks:
+                          <div className="input-group">
+                            <textarea
+                              value={question.freeformText || ""}
+                              className="form-control input-question"
+                              aria-label="With textarea"
+                              onChange={(e) =>
+                                handleFreeformChange(groupIndex, questionIndex, e.target.value)
+                              }
+                            ></textarea>
+                          </div>
+                        </label>
+                      </div>
                     ) : null}
                     <button
                       onClick={() => saveQuestion(groupIndex, questionIndex)}
-                      className="edit-save save-btn normal-save-ques"
+                      className="edit-save normal-save-ques"
                     >
                       Save Question
                     </button>
@@ -401,15 +431,19 @@ const CreateForm = () => {
                     <h4>{question.savedQuestionText}</h4>
                     <button
                       onClick={() => editQuestion(groupIndex, questionIndex)}
-                      className="edit-save add-qns"
+                      className="edit-save"
                     >
                       Edit Question
                     </button>
                     <button
                       onClick={() => deleteQuestion(groupIndex, questionIndex)}
-                      className="edit-save add-qns"
+                      className="edit-save trash"
                     >
-                      Delete Question
+                      <img 
+                        src="./uploads/trash.svg"
+                        className="trash"
+                        alt="trash"
+                      />
                     </button>
                   </div>
                 )}
@@ -421,17 +455,21 @@ const CreateForm = () => {
       <button onClick={openSectionModal} className="edit-save submit-section">
         Add Section
       </button>
-      <div className="submit-section">
-        <button onClick={handleSubmit} className="edit-save submit-btn">
-          Submit Form
-        </button>
+      <div>
+      <button onClick={handleSubmit} className="edit-save submit-btn">
+        Submit Form
+      </button>
+
       </div>
 
       {/* Modal for adding a new section */}
       {isSectionModalOpen && (
         <div className="modal">
           <div className="modal-content">
+          <div className="modal-header">
             <h3 className="pop-up-headi">Add New Section</h3>
+            <img src="./uploads/close.svg" className="close" alt="close" onClick={closeSectionModal}/>
+          </div>
             <input
               type="text"
               placeholder="Enter Section Title"
@@ -442,9 +480,7 @@ const CreateForm = () => {
             <button onClick={addGroup} className="edit-save save-btn">
               Save Section
             </button>
-            <button onClick={closeSectionModal} className="edit-save save-btn">
-              Close
-            </button>
+        
           </div>
         </div>
       )}
@@ -453,7 +489,11 @@ const CreateForm = () => {
       {isQuestionModalOpen && (
         <div className="modal">
           <div className="modal-content">
+          <div className="modal-header">
             <h3 className="pop-up-headi">Add New Question</h3>
+            <img src="./uploads/close.svg" className="close" alt="close" onClick={closeQuestionModal}/>
+          </div>
+
             {currentGroupIndex !== null &&
               currentQuestionIndex !== null &&
               grps[currentGroupIndex] &&
@@ -476,8 +516,9 @@ const CreateForm = () => {
                   />
                   <div className="choice-marks">
                     <select
-                      value={grps[currentGroupIndex].questions[currentQuestionIndex].type}
+                      value={grps[currentGroupIndex]?.questions[currentQuestionIndex]?.type || ''}
                       className="select-type"
+                      placeholder="Score"
                       onChange={(e) =>
                         handleQuestionTypeChange(
                           currentGroupIndex,
@@ -488,7 +529,7 @@ const CreateForm = () => {
                     >
                       <option value="multiple">Multiple Choice</option>
                       <option value="single">Single Choice</option>
-                      <option value="freeform">Free Form</option>
+                      <option value="freeform">Descriptive Remarks</option>
                     </select>
                     <input
                       type="number"
@@ -570,7 +611,7 @@ const CreateForm = () => {
                                     optionIndex
                                   )
                                 }
-                                className="edit-save add-qns"
+                                className="edit-save "
                               >
                                 Add Reason
                               </button>
@@ -580,7 +621,7 @@ const CreateForm = () => {
                       ))}
                       <button
                         onClick={() => addOption(currentGroupIndex, currentQuestionIndex)}
-                        className="edit-save add-qns"
+                        className="edit-save "
                       >
                         Add Option
                       </button>
@@ -590,12 +631,9 @@ const CreateForm = () => {
                     onClick={() =>
                       saveQuestion(currentGroupIndex, currentQuestionIndex)
                     }
-                    className="edit-save save-btn save-ques"
+                    className="edit-save save-ques"
                   >
                     Save Question
-                  </button>
-                  <button onClick={closeQuestionModal} className="edit-save save-btn">
-                    Close
                   </button>
                 </div>
               )}

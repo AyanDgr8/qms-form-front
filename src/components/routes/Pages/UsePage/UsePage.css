@@ -1,0 +1,43 @@
+/* src/components/routes/Pages/UsePage/UsePage.css */
+
+
+.everything{
+    background-color: white;
+}
+
+.main-first{
+    position: relative;
+    height: 12vh;
+    padding: 0;
+    margin: 0;
+}
+
+.main-second{
+    position: relative;
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+.side-content{
+    width: 25%;
+    padding: 0;
+    margin: 0;
+
+}
+
+.mbody-content{
+    width: 75%;
+    padding: 0;
+    margin: 0;
+}
+
+.form-tile{
+    background-color: #364C63;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-align: center;
+    padding: 0.5rem;
+
+}

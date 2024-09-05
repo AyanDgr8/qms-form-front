@@ -1,0 +1,240 @@
+/* src/components/routes/ViewForm/ViewForm.css */
+
+/* Form View Container */
+.form-vieww {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    overflow-y: auto;
+    height: 75vh;
+    text-align: left;
+}
+
+/* Form Title */
+.form-titlee {
+    font-size: 1.25rem;
+    color: white;
+    background-color: #EF6F53;
+    font-weight: 800;
+    border-bottom: 2px solid #e55347;
+    padding: 0.2rem;
+    padding-left: 1rem;
+    text-align: left;
+}
+
+/* Group Container */
+.groupp {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Group Title */
+.group-titlee {
+    font-size: 1.25rem;
+    color: #364c63;  
+    font-weight: 800;
+    display: flex;
+}
+
+/* Question Container */
+.questionn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #fafafa;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    color: #364c63;  
+    font-weight: 600;
+    position: relative; 
+}
+
+/* Align question text to the top-left */
+.questionn span:first-child {
+    align-self: flex-start;
+}
+
+/* Align score to the top-right */
+.score-tabb {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #ef6f53;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+/* Options Container */
+.optionss {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0.25rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Option Item */
+.optionn {
+    padding: 0.5rem;
+    margin-bottom: 0.25rem;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+/* Reason Container */
+.reasonss {
+    width: auto;
+    display: flex;
+    padding: 0.25rem;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: auto;
+    padding-bottom: 0;
+}
+
+.reasonss ul{
+    display: flex;
+    gap:2rem;
+    padding-bottom: 0;
+
+}
+
+/* Label and input adjustments */
+label {
+    display: flex;
+    align-items: center;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #e55347;  /* Highlighted text color */
+    margin-top: 2rem;
+}
+
+/* Error State */
+.error {
+    color: #e55347;  /* Highlighted error color */
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* No Data State */
+.no-data {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #e55347;  /* Highlighted no data color */
+    margin-top: 2rem;
+}
+
+/* Button Styles */
+.button-cont{
+    display: flex;
+    flex-direction: row;
+}
+
+.btn-usee {
+    background-color: #EF6F53;
+    color: white;
+    font-size: 0.9em;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 7.5px;
+    width: 10vw;
+    margin: 0.5rem auto;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-usee:hover {
+    background-color: #e55347;
+}
+
+.btn-delete{
+    background-color: #EF6F53;
+    color: white;
+    font-size: 0.9em;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 7.5px;
+    width: 10vw;
+    margin: 0.5rem auto;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+.modall {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contentt {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    margin-left: 25%;
+}
+
+.modal-contentt button {
+    margin: 10px;
+}
+
+.yes-no{
+    background-color: #EF6F53;
+    border: none;
+}
+
+.yes-no:hover{
+    background-color: #364c63;
+}
+
+.dropdown-rea{
+    margin: auto;
+    margin-right: 0;
+    text-align: end;
+    justify-content: end;
+    align-items: end;
+}
+
+.rea-button{
+    padding: 0.25rem;
+    background-color: #ddd;
+    border: #364c63;
+    font-size: 0.9rem;
+    color: black;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+}

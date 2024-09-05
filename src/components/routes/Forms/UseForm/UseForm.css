@@ -1,0 +1,153 @@
+/* src/components/routes/Forms/UseForm/UseForm.css */
+
+/* Form View Container */
+.form-view {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    overflow-y: auto;
+    height: 75vh;
+    text-align: left;
+}
+
+/* Form Title */
+.form-title {
+    font-size: 1.25rem;
+    color: white;
+    background-color: #EF6F53;
+    font-weight: 800;
+    border-bottom: 2px solid #e55347;
+    padding: 0.2rem;
+    padding-left: 1rem;
+    text-align: left;
+}
+
+/* Group Container */
+.group {
+    margin-bottom: 0.25rem;
+    padding: 0.25rem;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Group Title */
+.group-title {
+    font-size: 1.1rem;
+    color: #364c63;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+    margin-left: 0.5rem;
+}
+
+/* Question Container */
+.question {
+    padding: 0.5rem;
+    background-color: #fafafa;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 1rem;
+}
+
+/* Question and Score Container */
+.ques-score {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Question Text */
+.question-text {
+    font-weight: 600;
+    color: #364c63;
+}
+
+/* Score Tab */
+.score-tab {
+    font-weight: 600;
+    color: #ef6f53;
+    background-color: #ffefe8;
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+}
+
+/* Options Container */
+.options {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* Individual Option Container */
+.option {
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    align-items: center;
+    /* width: c100 */
+}
+
+/* Input styling */
+input[type="checkbox"],
+input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+.text-input{
+    width:50%;
+    border-color: #ddd;
+    height: 2.5rem;
+}
+
+/* Reasons Container */
+.reasons {
+    margin-left: 1.5rem;
+    padding: 0.25rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 0.25rem;
+}
+
+/* Submit Button */
+.btnssss {
+    background-color: #EF6F53;
+    color: white;
+    font-size: 0.9em;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 7.5px;
+    width: 10vw;
+    margin: 0.5rem auto;
+    display: block;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btnssss:hover {
+    background-color: #e55347;
+}
+
+.dropdown-reason{
+    margin: auto;
+    margin-right: 0;
+    text-align: end;
+    justify-content: end;
+    align-items: end;
+}
+
+.reasons-button{
+    padding: 0.25rem;
+    background-color: #ddd;
+    border: #364c63;
+    font-size: 0.9rem;
+    color: black;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+}
