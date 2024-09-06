@@ -1,7 +1,7 @@
 // src/components/routes/Forms/UseForm/UseForm.js
 
 import "./UseForm.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -13,19 +13,25 @@ const UseForm = () => {
     const [userAnswers, setUserAnswers] = useState({});
     const navigate = useNavigate();
 
+    const hasFetched = useRef(false);
+
     useEffect(() => {
-        axios.get(`http://localhost:3005/forms/${id}`)
-            .then(response => {
-                console.log("Fetched form data:", response.data);
-                setFormData(response.data);
-                initializeUserAnswers(response.data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Error fetching form data:", err);
-                setError("Error fetching form data");
-                setLoading(false);
-            });
+        if (!hasFetched.current) {
+            console.log("Fetching form data...");
+            axios.get(`http://localhost:3005/forms/${id}`)
+                .then(response => {
+                    console.log("Fetched form data:", response.data);
+                    setFormData(response.data);
+                    initializeUserAnswers(response.data);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.error("Error fetching form data:", err);
+                    setError("Error fetching form data");
+                    setLoading(false);
+                });
+            hasFetched.current = true;
+        }
     }, [id]);
 
     const initializeUserAnswers = (data) => {
@@ -90,18 +96,25 @@ const UseForm = () => {
         event.preventDefault();
         setLoading(true);
         setError(null);
-
+    
+        // Convert answers into a format suitable for MySQL
         const userData = {
             formId: id,
             grps: formData.grps,
-            answers: userAnswers
+            answers: Object.keys(userAnswers).reduce((acc, questionId) => {
+                acc[questionId] = {
+                    ...userAnswers[questionId],
+                    selectedOptions: JSON.stringify(userAnswers[questionId].selectedOptions),
+                    selectedReasons: JSON.stringify(userAnswers[questionId].selectedReasons)
+                };
+                return acc;
+            }, {})
         };
-  
+    
         try {
-            await axios.post(`http://localhost:3005/use-form/${id}`,userData);
+            await axios.post(`http://localhost:3005/use-form/${id}`, userData);
             alert("Form submitted successfully!");
             navigate('/forms');
-
         } catch (error) {
             console.error("Error submitting form:", error);
             setError("An error occurred while submitting the form. Please try again.");
@@ -109,6 +122,7 @@ const UseForm = () => {
             setLoading(false);
         }
     };
+    
 
     if (loading) return <p className="loading">Loading...</p>;
     if (error) return <p className="error">{error}</p>;
@@ -128,107 +142,109 @@ const UseForm = () => {
                                     <p className="score-tab">{question.marks}</p>
                                 </div>
 
-                                {question.question_type === 'multiple' && question.options && (
-                                    <div className="options">
-                                        {question.options.map(option => (
-                                            <div key={option.id} className="option">
-                                                <label>
-                                                    <input
-                                                        type="checkbox"
-                                                        className="form-check-input mt-0"
-                                                        name={`question-${question.id}`}
-                                                        value={option.id}
-                                                        checked={userAnswers[question.id]?.selectedOptions[option.id] || false}
-                                                        onChange={(event) => handleInputChange(question.id, option.id, event)}
-                                                    />
-                                                    {option.option_text}
-                                                </label>
-                                                {option.is_fatal && (
-                                                    <span className="is-fatal-badge ms-3 text-danger">isFatal</span>
-                                                )}
-                                                {option.is_fatal && option.reasons && (
-                                                    <div className="dropdown-reason">
-                                                        <button
-                                                            className="btn btn-secondary dropdown-toggle reasons-button"
-                                                            type="button"
-                                                            id={`dropdownMenuButton-${question.id}-${option.id}`}
-                                                            data-bs-toggle="dropdown"
-                                                            aria-expanded="false"
-                                                        >
-                                                            Reasons
-                                                        </button>
-                                                        <ul className="dropdown-menu" aria-labelledby={`dropdownMenuButton-${question.id}-${option.id}`}>
-                                                            {option.reasons.map(reason => (
-                                                                <li key={reason.id}>
-                                                                    <label className="dropdown-item">
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            value={reason.id}
-                                                                            checked={userAnswers[question.id]?.selectedReasons[option.id]?.includes(reason.id) || false}
-                                                                            onChange={(event) => handleReasonChange(question.id, option.id, event)}
-                                                                        />
-                                                                        {reason.reason_text}
-                                                                    </label>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                                {question.question_type === 'multiple' && question.options && question.options.length > 0 && (
+  <div className="optionss">
+    {question.options.map(option => (
+      <div key={option.id} className="optionn d-flex align-items-center">
+        <label>
+          <input
+            type="checkbox"
+            name={`question-${question.id}`}
+            value={option.id}
+            checked={userAnswers[question.id]?.selectedOptions[option.id] || false}
+            onChange={(event) => handleInputChange(question.id, option.id, event)}
+          />
+          {option.is_fatal === 1
+            ? option.option_text.replace(/0+$/, "")  // Replace multiple trailing zeros with a single zero for fatal options.
+            : option.option_text}  {/* If not fatal, use the option text as is */}
+        </label>
+        {option.is_fatal === 1 && (
+          <span className="is-fatal-badge ms-3 text-danger">isFatal</span>
+        )}
+        {option.is_fatal === 1 && option.reasons && option.reasons.length > 0 && (
+          <div className="dropdown-rea ms-auto">
+            <button
+              className="btn btn-secondary dropdown-toggle rea-button"
+              type="button"
+              id={`dropdownMenuButton-${question.id}-${option.id}`}
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Reasons
+            </button>
+            <ul className="dropdown-menu" aria-labelledby={`dropdownMenuButton-${question.id}-${option.id}`}>
+              {option.reasons.map(reason => (
+                <li key={reason.id}>
+                  <label className="dropdown-item">
+                    <input
+                      type="radio"
+                      value={reason.id}
+                      checked={userAnswers[question.id]?.selectedReasons[option.id]?.includes(reason.id) || false}
+                      onChange={(event) => handleReasonChange(question.id, option.id, event)}
+                    />
+                    {reason.reason_text}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+)}
 
-                                {question.question_type === 'single' && question.options && (
-                                    <div className="options">
-                                        {question.options.map(option => (
-                                            <div key={option.id} className="option">
-                                                <label>
-                                                    <input
-                                                        type="radio"
-                                                        className="form-check-input mt-0"
-                                                        name={`question-${question.id}`}
-                                                        value={option.id}
-                                                        checked={userAnswers[question.id]?.selectedOptions[option.id] || false}
-                                                        onChange={(event) => handleInputChange(question.id, option.id, event)}
-                                                    />
-                                                    {option.option_text}
-                                                </label>
-                                                {option.is_fatal && (
-                                                    <span className="is-fatal-badge ms-3 text-danger">isFatal</span>
-                                                )}
-                                                {option.is_fatal && option.reasons && (
-                                                    <div className="dropdown-reason">
-                                                        <button
-                                                            className="btn btn-secondary dropdown-toggle reasons-button"
-                                                            type="button"
-                                                            id={`dropdownMenuButton-${question.id}-${option.id}`}
-                                                            data-bs-toggle="dropdown"
-                                                            aria-expanded="false"
-                                                        >
-                                                            Reasons
-                                                        </button>
-                                                        <ul className="dropdown-menu" aria-labelledby={`dropdownMenuButton-${question.id}-${option.id}`}>
-                                                            {option.reasons.map(reason => (
-                                                                <li key={reason.id}>
-                                                                    <label className="dropdown-item">
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            value={reason.id}
-                                                                            checked={userAnswers[question.id]?.selectedReasons[option.id]?.includes(reason.id) || false}
-                                                                            onChange={(event) => handleReasonChange(question.id, option.id, event)}
-                                                                        />
-                                                                        {reason.reason_text}
-                                                                    </label>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+{question.question_type === 'single' && question.options && question.options.length > 0 && (
+  <div className="optionss">
+    {question.options.map(option => (
+      <div key={option.id} className="optionn d-flex align-items-center">
+        <label>
+          <input
+            type="radio"
+            name={`question-${question.id}`}
+            value={option.id}
+            checked={userAnswers[question.id]?.selectedOptions[option.id] || false}
+            onChange={(event) => handleInputChange(question.id, option.id, event)}
+          />
+          {option.is_fatal === 1
+            ? option.option_text.replace(/0+$/, "")  // Replace multiple trailing zeros with a single zero for fatal options.
+            : option.option_text}  {/* If not fatal, use the option text as is */}
+        </label>
+        {option.is_fatal === 1 && (
+          <span className="is-fatal-badge ms-3 text-danger">isFatal</span>
+        )}
+        {option.is_fatal === 1 && option.reasons && option.reasons.length > 0 && (
+          <div className="dropdown-rea ms-auto">
+            <button
+              className="btn btn-secondary dropdown-toggle rea-button"
+              type="button"
+              id={`dropdownMenuButton-${question.id}-${option.id}`}
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Reasons
+            </button>
+            <ul className="dropdown-menu" aria-labelledby={`dropdownMenuButton-${question.id}-${option.id}`}>
+              {option.reasons.map(reason => (
+                <li key={reason.id}>
+                  <label className="dropdown-item">
+                    <input
+                      type="radio"
+                      value={reason.id}
+                      checked={userAnswers[question.id]?.selectedReasons[option.id]?.includes(reason.id) || false}
+                      onChange={(event) => handleReasonChange(question.id, option.id, event)}
+                    />
+                    {reason.reason_text}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+)}
 
                                 {question.question_type === 'freeform' && (
                                     <div className="input-group">
@@ -252,3 +268,4 @@ const UseForm = () => {
 };
 
 export default UseForm;
+

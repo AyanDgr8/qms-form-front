@@ -1,6 +1,6 @@
 // src/components/routes/FormList/FormList.js
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./FormList.css";
@@ -10,18 +10,24 @@ const FormList = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const hasFetched = useRef(false);
+
     useEffect(() => {
-        axios.get('http://localhost:3005/forms')  // Use full URL to your backend
-            .then(response => {
-                console.log("Fetched forms:", response.data);
-                setForms(response.data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Error fetching forms:", err);
-                setError("Error fetching forms");
-                setLoading(false);
-            });
+    if (!hasFetched.current) {
+        console.log("Fetching form data...");
+        axios.get('http://localhost:3005/forms')  
+        .then(response => {
+            console.log("Fetched forms:", response.data);
+            setForms(response.data);
+            setLoading(false);
+        })
+        .catch(err => {
+            console.error("Error fetching forms:", err);
+            setError("Error fetching forms");
+            setLoading(false);
+        });
+        hasFetched.current = true;
+    }
     }, []);
 
     if (loading) return <p>Loading...</p>;

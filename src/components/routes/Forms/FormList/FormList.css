@@ -6,7 +6,6 @@
     font-size: 1.25rem;
     font-weight: 800;
     padding: 0.5rem;
-    /* text-align: left; */
 }
 
 .form-list {
@@ -23,7 +22,7 @@
 .form-table th,
 .form-table td {
     padding: 0.25rem;
-    text-align: center;
+    text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
@@ -42,8 +41,9 @@
 }
 
 .form-table a {
-    text-decoration: none;
     color: #EF6F53;
+    font-weight: 700;
+    text-decoration: none;
 }
 
 .form-table a:hover {

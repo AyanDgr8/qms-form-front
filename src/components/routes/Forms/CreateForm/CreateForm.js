@@ -218,7 +218,10 @@ const CreateForm = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("Submitting form...");
+  
     if (totalMarks !== 100) {
       alert("Inappropriate marks distribution!! Please Try Again");
       return;
@@ -341,7 +344,7 @@ const CreateForm = () => {
                             <input
                               type="text"
                               placeholder="Enter Option Text"
-                              value={option.text}
+                              value={option.text || ""}
                               className="input-question opt-txt"
                               onChange={(e) =>
                                 handleOptionTextChange(
@@ -352,7 +355,7 @@ const CreateForm = () => {
                                 )
                               }
                             />
-                            <label>
+                            <label className="lbl">
                               <input
                                 type="checkbox"
                                 checked={option.isFatal}
@@ -456,7 +459,7 @@ const CreateForm = () => {
         Add Section
       </button>
       <div>
-      <button onClick={handleSubmit} className="edit-save submit-btn">
+      <button  onClick={handleSubmit} className="edit-save submit-btn">
         Submit Form
       </button>
 
@@ -557,7 +560,7 @@ const CreateForm = () => {
                           <input
                             type="text"
                             placeholder="Enter Option Text"
-                            value={option.text}
+                            value={option.text || ""}
                             className="input-question"
                             onChange={(e) =>
                               handleOptionTextChange(
@@ -568,7 +571,7 @@ const CreateForm = () => {
                               )
                             }
                           />
-                          <label>
+                          <label className="lbl">
                             <input
                               type="checkbox"
                               checked={option.isFatal}
